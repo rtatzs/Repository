@@ -131,6 +131,7 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <None Include="Arduino Codes\DataSender_Arduino.ino" />
     <None Include="Arduino Serial Com_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
