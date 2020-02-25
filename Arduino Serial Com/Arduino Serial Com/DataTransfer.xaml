@@ -1,0 +1,138 @@
+﻿<Page
+    x:Class="Arduino_Serial_Com.DataTransfer"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Arduino_Serial_Com"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Page.Resources>
+        <Style TargetType="Button" x:Key="EON_Button_Style">
+            <Setter Property="Foreground" Value="#FF083940"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="FontWeight" Value="ExtraBold"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        <Style TargetType="Grid" x:Key="EON_Default_Grd_Color">
+            <Setter Property="Background" Value="#f5f5f5"/>
+        </Style>
+    </Page.Resources>
+
+    <Grid Background="#f5f5f5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="50" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid x:Name="varHeader" Style="{StaticResource EON_Default_Grd_Color}">
+                <Grid.ColumnDefinitions >
+                    <ColumnDefinition Width="6*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal" Grid.Column="0">
+                    <Button Width="60" Height="45" Name="menuButton" Margin="0,0,0,0" Style="{ThemeResource EON_Button_Style}" Click="MenuButton_Click">
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE700;" FontSize="30" Margin="-0.2,-0.2,0.6,0.6" VerticalAlignment="Stretch"/>
+                    </Button>
+                    <TextBlock Text="CONNECTION" Margin="0,7,0,0" FontSize="24" FontFamily="Segoe UI" Foreground="#FF083940" FontWeight="Bold"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right">
+                    <Button Width="60" Height="45"   Margin="0,0,0,0" Style="{StaticResource EON_Button_Style}">
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE72B;" FontSize="25" FontWeight="ExtraBold" Foreground="#FF083940"/>
+                    </Button>
+                    <TextBlock Text="Back" Margin="0,7,15,0" FontSize="20" FontFamily="Segoe UI" Foreground="#FF083940" FontWeight="Light"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+        <SplitView Grid.Row="1" Name="mainSplitView" DisplayMode="CompactInline" OpenPaneLength="250" CompactPaneLength="60" >
+            <SplitView.Pane>
+                <ListView Name="ConnectionList" SelectionChanged="EON_MainList_SelectionChanged">
+                    <ListViewItem>
+                        <StackPanel Orientation="Horizontal">
+                            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE965;" FontSize="28" FontWeight="ExtraLight" Foreground="#FF083940"/>
+                            <TextBlock Margin="30,0,0,0" FontSize="15" Text="Serial (RS232)" Foreground="#FF083940"  FontFamily="Segoe UI"/>
+                        </StackPanel>
+                    </ListViewItem>
+                    <ListViewItem>
+                        <StackPanel Orientation="Horizontal">
+                            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE964;" FontSize="28" FontWeight="ExtraLight" Foreground="#FF083940"/>
+                            <TextBlock Margin="30,0,0,0" FontSize="15" Text="ESP8266" Foreground="#FF083940"  FontFamily="Segoe UI"/>
+                        </StackPanel>
+                    </ListViewItem>
+                    <ListViewItem>
+                        <StackPanel Orientation="Horizontal">
+                            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEC41;" FontSize="28" FontWeight="ExtraLight" Foreground="#FF083940"/>
+                            <TextBlock Margin="30,0,0,0" FontSize="15" Text="Bluetooth" Foreground="#FF083940"  FontFamily="Segoe UI"/>
+                        </StackPanel>
+                    </ListViewItem>
+                    <ListViewItem>
+                        <StackPanel Orientation="Horizontal">
+                            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEE77;" FontSize="28" FontWeight="ExtraLight" Foreground="#FF083940"/>
+                            <TextBlock Margin="30,0,0,0" FontSize="15" Text="Wifi" Foreground="#FF083940"  FontFamily="Segoe UI"/>
+                        </StackPanel>
+                    </ListViewItem>
+                    <ListViewItem>
+                        <StackPanel Orientation="Horizontal">
+                            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE839;" FontSize="28" FontWeight="ExtraLight" Foreground="#FF083940"/>
+                            <TextBlock Margin="30,0,0,0" FontSize="15" Text="RG45" Foreground="#FF083940"  FontFamily="Segoe UI"/>
+                        </StackPanel>
+                    </ListViewItem>
+                </ListView>
+            </SplitView.Pane>
+            <SplitView.Content>
+                <Frame>
+                    <Grid Background="#f5f5f5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="200"/>
+                            <RowDefinition Height="150"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="{x:Bind SubTitle,Mode=TwoWay}" Margin="15,0,0,0" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI" Foreground="#FF083940" FontWeight="Bold"/>
+                        <ListBox x:Name="lstSerialDevices" Grid.Row="1">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Id}"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <StackPanel Orientation="Horizontal" Grid.Row="2">
+                            <TextBox x:Name="txtDataRecieved" PlaceholderText="Recieved" Width="400" Height="auto" Margin="10" AcceptsReturn="True" Grid.Row="3" HorizontalAlignment="Left"/>
+                            <TextBox x:Name="txtDataSent" PlaceholderText="Sent" Width="470" Height="auto" Margin="10" AcceptsReturn="True" Grid.Row="3" HorizontalAlignment="Left"/>
+                        </StackPanel>
+                        <Grid Grid.Row="3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="400"/>
+                                <ColumnDefinition Width="400*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Orientation="Horizontal" Grid.Column="0">
+                                <TextBox x:Name="txtResult" PlaceholderText="Result" Width="390" Height="auto" Margin="10" AcceptsReturn="True" Grid.Row="3" TextWrapping="Wrap" />
+                            </StackPanel>
+                            <StackPanel Orientation="Vertical" Grid.Column="1">
+                                <TextBlock x:Name="txtDetail" Margin="30,5,5,5" TextWrapping="WrapWholeWords" Text="Details" FontWeight="SemiBold" FontSize="18" Grid.Row="0" Grid.ColumnSpan="3" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button x:Name="btnSerialConnect" Click="ConnectClick" Width="100" Height="80" FontWeight="ExtraBold"  Margin="30,5,5,5"  Background="Azure" Grid.Row="0" Grid.Column="4"  BorderBrush="#FF083940">
+                                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE703;" FontSize="50" FontWeight="ExtraBold" Foreground="#FF083940"/>
+                                    </Button>
+                                    <Button x:Name="btnDisconnect" Click="ConnectClick" Width="100" Height="80"  Margin="5,5,5,5"  Background="Azure" Grid.Row="0" Grid.Column="4" BorderBrush="#FF083940">
+                                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8CD;" FontSize="50" FontWeight="ExtraBold" Foreground="#FF083940"/>
+                                    </Button>
+                                    <Button x:Name="btnSend" Click="ConnectClick" Width="100" Height="80"   Margin="5,5,5,5"  Background="Azure" Grid.Row="0" Grid.Column="4" BorderBrush="#FF083940">
+                                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEA63;" FontSize="50" FontWeight="ExtraBold" Foreground="#FF083940"/>
+                                    </Button>
+                                    <Button x:Name="btnClear" Click="ConnectClick" Width="100"  Height="80" FontSize="20" Margin="5,5,5,5"  Background="Azure" Grid.Row="0" Grid.Column="4" BorderBrush="#FF083940">
+                                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xED62;" FontSize="50" FontWeight="ExtraBold" Foreground="#FF083940"/>
+                                    </Button>
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                </Frame>
+            </SplitView.Content>
+        </SplitView>
+        <Grid Grid.Row="2" Background="LightGray" BorderBrush="Azure" BorderThickness="0,1,0,0">
+        </Grid>
+    </Grid>
+</Page>
